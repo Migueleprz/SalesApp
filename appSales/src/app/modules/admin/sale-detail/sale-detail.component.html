@@ -1,0 +1,104 @@
+<div class="animate__animated  animate__fadeIn">
+  <div class="row justify-content-center mb-3">
+    <div class="col-sm-12 col-md-8">
+      <div class="card px-3">
+        <div class="row justify-content-center my-3">
+          <div class="col-sm-12 col-md-4">
+            <label>Tipo de Precios</label>
+            <select [(ngModel)]="selectPrice" class="form-control">
+              <option *ngFor="let item of priceType" [value]="item.id">{{item.name}}</option>
+            </select>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <label>Cantidad</label>
+            <input type="number" [(ngModel)]="amaunt" class="form-control">
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <label>Código del Producto</label>
+            <input
+              class="form-control"
+              type="text"
+              [(ngModel)]="code"
+              (keyup.enter)="getProduct(code)"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-sm-12 col-md-9">
+      <div class="card table-responsive">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>No.</th>
+            <th>Producto</th>
+            <th>Precio Base</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+            <th>Acción</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of ventaDetalle; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{item.product}}</td>
+              <td>{{item.base_price}}</td>
+              <td>{{item.amount}}</td>
+              <td>{{item.value}}</td>
+              <td>
+                <button
+                  class="btn btn-danger"
+                  (click)="deleteProdu(item.id, item.product, item.product_id, item.amount)"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-2">
+      <div class="card">
+       <div class="row p-3">
+         <div class="col-sm-12 col-md-12 mb-2">
+           <label class="form-check-label text-bold">Total</label>
+           <input
+             type="number"
+             class="form-control"
+             [readonly]="true" [(ngModel)]="total"
+           >
+         </div>
+         <div class="col-sm-12 col-md-12 mb-2">
+           <label class="form-check-label text-bold">Efectivo</label>
+           <input type="number" class="form-control" [(ngModel)]="cash">
+         </div>
+         <div class="col-sm-12 col-md-12 mb-2">
+           <label class="form-check-label text-bold">Descuento</label>
+           <input
+             type="number"
+             class="form-control"
+             [(ngModel)]="discount"
+             (keyup.enter)="calcPricePay()"
+           >
+         </div>
+         <div class="col-sm-12 col-md-12 mb-2">
+           <label class="form-check-label text-bold">Valor a pagar</label>
+           <input type="number" class="form-control" [readonly]="true" [(ngModel)]="price_pay">
+         </div>
+         <div class="col-sm-12 col-md-12 mb-4">
+           <label class="form-check-label text-bold">Cambio</label>
+           <input type="number" class="form-control" [readonly]="true" [(ngModel)]="turned">
+         </div>
+         <div class="col-sm-12 col-md-12 mb-2">
+           <button class="btn btn-dark w-100" (click)="pay()">
+             <i class="fa-solid fa-hand-holding-dollar"></i> Pagar
+           </button>
+         </div>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>

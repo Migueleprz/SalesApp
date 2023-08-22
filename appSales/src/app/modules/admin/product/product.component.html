@@ -1,0 +1,176 @@
+<div class="animate__animated animate__fadeIn">
+  <app-card [title]="title">
+    <div btn>
+      <button
+        class="btn btn-dark"
+        (click)="handleTitle()">
+        {{labelButton}}
+      </button>
+    </div>
+    <!--formulario-->
+    <div [hidden]="!showForm">
+      <form [formGroup]="frg">
+        <div class="row mb-2">
+          <div class="col-sm-12 col-md-3">
+            <label for="code">{{labelp.code}}</label>
+            <input
+              class="form-control"
+              type="text"
+              name="code"
+              id="code"
+              formControlName="code"
+            >
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <label for="name">{{labelp.name}}</label>
+            <input
+              class="form-control"
+              type="text"
+              name="name"
+              id="name"
+              formControlName="name"
+            >
+          </div>
+          <div class="col-sm-12 col-md-3">
+            <label for="stock">{{labelp.stock}}</label>
+            <input
+              class="form-control"
+              type="text"
+              name="stock"
+              id="stock"
+              formControlName="stock"
+            >
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm-12 col-md-3">
+            <label for="unit_price">{{labelp.unit_price}}</label>
+            <input
+              class="form-control"
+              type="text"
+              name="unit_price"
+              id="unit_price"
+              formControlName="unit_price"
+            >
+          </div>
+          <div class="col-sm-12 col-md-3">
+            <label for="whs_price">{{labelp.whs_price}}</label>
+            <input
+              class="form-control"
+              type="text"
+              name="whs_price"
+              id="whs_price"
+              formControlName="whs_price"
+            >
+          </div>
+          <div class="col-sm-12 col-md-3">
+            <label for="purch_price">{{labelp.purch_price}}</label>
+            <input
+              class="form-control"
+              type="text"
+              name="whs_price"
+              id="purch_price"
+              formControlName="purch_price"
+            >
+          </div>
+        </div>
+        <div class="row mb-2 justify-content-end">
+          <div class="col-sm-12 col-md-2 mb-2">
+            <button
+              [class]="newProduct ? 'btn btn-outline-success w-100':'btn btn-outline-warning w-100'"
+              (click)="newProduct ? save() : update()"
+              [disabled]="frg.invalid"
+            >
+              {{newProduct ? labelg.guardar : labelg.actualizar}}
+            </button>
+          </div>
+          <div class="col-sm-12 col-md-2">
+            <button
+              class="btn btn-outline-secondary w-100"
+              (click)="cancel()"
+            >
+              {{labelg.cancelar}}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!--tabla de datos-->
+    <div [hidden]="showForm">
+      <div class="row">
+        <div class="col-12 mb-2">
+          <input class="form-control" (keyup)="applyFilter($event)" placeholder="nombres" #input>
+        </div>
+        <div class="col-12 table-responsive table-responsive-md table-responsive-sm">
+          <table mat-table [dataSource]="dataSource" matSort>
+
+            <!-- Code Column -->
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{labelp.code}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.code}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{labelp.name}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            </ng-container>
+
+            <!-- Stock Column -->
+            <ng-container matColumnDef="stock">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{labelp.stock}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.stock}} </td>
+            </ng-container>
+
+            <!-- Unit Price Column -->
+            <ng-container matColumnDef="unit">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{labelp.unit_price}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.unit_Price}} </td>
+            </ng-container>
+
+            <!-- Code Column -->
+            <ng-container matColumnDef="whs">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{labelp.whs_price}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.whs_Price}} </td>
+            </ng-container>
+
+            <!-- Code Column -->
+            <ng-container matColumnDef="purch">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{labelp.purch_price}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.purch_Price}} </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{labelg.acciones}} </th>
+              <td mat-cell *matCellDef="let row">
+                <div class="row justify-content-end">
+                  <div class="col-sm-12 mb-2 col-md-6">
+                    <button class="btn btn-outline-primary" (click)="get(row.id)">
+                      <i class="fa-solid fa-edit"></i>
+                    </button>
+                  </div>
+                  <div class="col-sm-12 mb-2 col-md-6">
+                    <button class="btn btn-outline-danger" (click)="delete(row.id)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </app-card>
+</div>

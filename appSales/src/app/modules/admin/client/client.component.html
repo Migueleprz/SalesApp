@@ -1,0 +1,145 @@
+<div class="animate__animated animate__fadeIn">
+  <app-card [title]="title">
+    <div btn>
+      <button
+        class="btn btn-dark"
+        (click)="handleTitle()">
+        {{labelButton}}
+      </button>
+    </div>
+    <!--formulario-->
+    <div [hidden]="!showForm">
+      <form [formGroup]="frg">
+        <div class="row mb-2">
+          <div class="col-sm-12 col-md-4">
+            <label>{{label.dni}}</label>
+            <input
+              class="form-control"
+              required
+              formControlName="dni"
+            >
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <label>{{label.names}}</label>
+            <input
+              class="form-control"
+              required
+              formControlName="names"
+            >
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <label>{{label.lastnames}}</label>
+            <input
+              class="form-control"
+              required
+              formControlName="lastNames"
+            >
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm-12 col-md-4">
+            <label>{{label.phone}}</label>
+            <input
+              class="form-control"
+              required
+              formControlName="phone"
+            >
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <label>{{label.dir}}</label>
+            <input
+              class="form-control"
+              required
+              formControlName="dir"
+            >
+          </div>
+          <div class="col-sm-12 col-md-2"></div>
+        </div>
+        <div class="row mb-2 justify-content-end">
+          <div class="col-sm-12 col-md-2 mb-2">
+            <button
+              [class]="newClient ? 'btn btn-outline-success w-100':'btn btn-outline-warning w-100'"
+              (click)="newClient ? save() : update()"
+              [disabled]="frg.invalid"
+            >
+              {{newClient ? labelg.guardar : labelg.actualizar}}
+            </button>
+          </div>
+          <div class="col-sm-12 col-md-2">
+            <button
+              class="btn btn-outline-secondary w-100"
+            (click)="cancel()"
+            >
+              {{labelg.cancelar}}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!--tabla de datos-->
+    <div [hidden]="showForm">
+      <div class="row">
+          <div class="col-12 mb-2">
+            <input class="form-control" (keyup)="applyFilter($event)" placeholder="nombres" #input>
+          </div>
+        <div class="col-12 table-responsive table-responsive-md table-responsive-sm">
+          <table mat-table [dataSource]="dataSource" matSort>
+
+            <!-- DNI Column -->
+            <ng-container matColumnDef="dni">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{label.dni}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.dni}} </td>
+            </ng-container>
+
+            <!-- Names Column -->
+            <ng-container matColumnDef="names">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{label.dni}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.names+' '+row.lastNames}} </td>
+            </ng-container>
+
+            <!-- Phone Column -->
+            <ng-container matColumnDef="phone">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{label.phone}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
+            </ng-container>
+
+            <!-- Dir Column -->
+            <ng-container matColumnDef="dir">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{label.dir}} </th>
+              <td mat-cell *matCellDef="let row"> {{row.dir}} </td>
+            </ng-container>
+
+            <!-- Phone Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> {{label.names}} </th>
+              <td mat-cell *matCellDef="let row">
+                <div class="row justify-content-end">
+                  <div class="col-sm-12 mb-2 col-md-6">
+                    <button class="btn btn-outline-primary" (click)="get(row.id)">
+                      <i class="fa-solid fa-edit"></i>
+                    </button>
+                  </div>
+                  <div class="col-sm-12 mb-2 col-md-6">
+                    <button class="btn btn-outline-danger" (click)="delete(row.id)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </app-card>
+</div>
